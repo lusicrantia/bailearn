@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+{% block title %} Home  {% endblock %}
+
+{% block content %} 
+<div class="hero">
+    <div>
+        <h1>A calmer way to learn.</h1>
+        <p class="muted">Keep your study notes and focus tools in one place. Clear your mind, find your next step, and make space for better learning.</p>
+    </div>
+
+    <div class="button-row">
+        <a class="button primary" href="{{ url_for('register') }}">Get Started</a>
+        <a class="button" href="{{ url_for('login') }}">Login</a>
+    </div>
+</div>
+
+{% endblock %}

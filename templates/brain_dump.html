@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %} Brain Dump Box {% endblock %}
+
+{% block content %} 
+<div class="dump-container">
+    <div class="dump-form">
+         <h2 class="title">Brain Dump Box</h2>
+         <p>Put your ideas and organize it!</p>
+
+
+         <form method="POST" action="{{ url_for('brain_dump')}}">
+             <textarea name="content" placeholder="What's on your mind?" rows="10" required></textarea>
+            <button type="submit">Save the dump box</button>
+         </form>
+
+         <hr>
+
+         {% for dump in dumps %}
+
+         <div class="dumps-card">
+            <p>{{ dump.content }}</p>
+
+              <small>
+                {{ dump.created_at.strftime('%B %d, %Y - %I:%M %p') }}
+            </small>
+
+         </div>
+
+         {% else %}
+          <p>No dumps yet.</p>
+
+          {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+

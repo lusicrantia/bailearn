@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} Flashcard {% endblock %}
+
+{% block content %}
+
+<div class="flashcard-container">
+
+    <h1>Flashcard Generator</h1>
+    <p>Create your own study cards to help you learn.</p>
+
+    <form method="POST" action="{{ url_for('flashcard') }}">
+
+        <label for="question">Question</label>
+        <textarea
+            name="question"
+            id="question"
+            placeholder="Enter your question..."
+            required></textarea>
+
+        <label for="answer">Answer</label>
+        <textarea
+            name="answer"
+            id="answer"
+            placeholder="Enter your answer..."
+            required></textarea>
+
+        <button type="submit">Create Flashcard</button>
+
+    </form>
+
+    <hr>
+
+    <h2>Your Flashcards</h2>
+
+    {% for card in cards %}
+
+        <div class="flashcard">
+
+            <h3>{{ card.question }}</h3>
+            <p>{{ card.answer }}</p>
+
+        </div>
+
+    {% else %}
+
+        <p>No flashcards yet. Create your first one!</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

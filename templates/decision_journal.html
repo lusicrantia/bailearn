@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} Decision Journal {% endblock %}
+
+{% block content %}
+
+
+<div class="decision-container">
+    <h1>Decision Journal</h1>
+    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Soluta acc</p>
+
+    <form method="POST", action="{{ url_for('decision_journal')}}">
+         <label for="title">What's your title?</label>
+         <input type="text" name="title" id="title" placeholder="What is this decision?" required></textarea>
+
+         <label for="decision">What's your decisoin?</label>
+         <textarea type="text" name="decision" id="decision" placeholder="Describe your decision.." required></textarea>
+
+         <label for="reason">What's your reason?</label>
+         <textarea type="text" name="reason" id="reason" placeholder="Describe your reasons...?" required></textarea>
+
+         <label for="outcome">What's the outcome?</label>
+         <textarea type="text" name="outcome" id="outcome" placeholder="What's the outcome of your decision" required></textarea>
+
+         <label for="solution">What's your possible solutions?</label>
+         <textarea name="solution" id="solution" placeholder="What is your possible solution" required></textarea>
+
+        <button type="submit">Save Decision</button>
+    </form>
+
+    <hr>
+
+    <h2>Previous Decision</h2>
+
+        {% for journal in journals %}
+            <div class="journal-card">
+                
+                <h3>{{ journal.title }}</h3>
+
+                <p><strong>Decision: </strong></p>
+                <p></p>{{ journal.decision }} 
+
+                <p><strong>Reason: </strong></p>
+                <p></p>{{ journal.reason }} 
+
+                <p><strong>Outcome: </strong></p>
+                <p></p>{{ journal.outcome }} 
+
+                <p><strong>Solution: </strong></p>
+                <p></p>{{ journal.solution }} 
+
+            </div>
+
+            {% else %}
+
+            <p>No decisions recorded yet.</p>
+
+            {% endfor %}
+
+</div>
+
+
+{% endblock %}
