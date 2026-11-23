@@ -1,0 +1,152 @@
+.content-section,
+.dashboard {
+    width: min(100%, var(--content-width));
+    margin: 0 auto;
+}
+
+.content-section > .content-title,
+.content-section > .content-intro {
+    max-width: 620px;
+}
+
+.section-divider {
+    height: 1px;
+    margin: 40px 0 28px;
+    border: 0;
+    background: var(--border);
+}
+
+.entry-heading {
+    margin: 0 0 16px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.entry-list {
+    display: grid;
+    gap: 12px;
+}
+
+.entry {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--off-white);
+}
+
+.entry h2,
+.entry h3 {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.entry p {
+    margin: 0 0 12px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.entry p:last-child {
+    margin-bottom: 0;
+}
+
+.entry-label {
+    color: var(--gray-mid);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.entry time {
+    color: var(--gray-mid);
+    font-size: 0.84rem;
+}
+
+.empty-state {
+    margin: 0;
+    color: var(--gray-mid);
+}
+
+.entry-list > .empty-state {
+    width: 100%;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--off-white);
+}
+
+.flash-messages {
+    margin: 0 0 28px;
+}
+
+.flash-message {
+    margin: 0;
+    padding: 10px 12px;
+    border-left: 2px solid var(--gray-dark);
+    background: var(--off-white);
+    color: var(--gray-dark);
+    font-size: 0.9rem;
+}
+
+.entry-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px 16px;
+    margin-top: 18px;
+}
+
+.entry-actions > form {
+    margin: 0;
+}
+
+.entry-actions button,
+.entry-actions summary {
+    min-height: 34px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--white);
+    color: var(--gray-dark);
+    font-size: 0.84rem;
+    font-weight: 500;
+}
+
+.entry-actions button:hover,
+.entry-actions summary:hover {
+    border-color: var(--gray-light);
+    background: var(--off-white);
+    color: var(--black);
+}
+
+.entry-actions summary {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+}
+
+.entry-actions summary::-webkit-details-marker {
+    display: none;
+}
+
+.edit-details[open] {
+    width: 100%;
+}
+
+.edit-details .content-form {
+    margin-top: 14px;
+}
+
+.entry-actions button.danger {
+    border-color: var(--border);
+    background: var(--white);
+    color: var(--gray-dark);
+}
+
+.entry-actions button.danger:hover {
+    border-color: var(--gray-dark);
+    color: var(--black);
+}

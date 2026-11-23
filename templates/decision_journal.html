@@ -1,63 +1,154 @@
+
 {% extends 'base.html' %}
 
 {% block title %} Decision Journal {% endblock %}
 
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/decision_journal.css') }}">
+{% endblock %}
+
 {% block content %}
+<section class="content-section decision-journal" aria-labelledby="journal-title">
 
+    <h1 id="journal-title" class="content-title">Decision Journal</h1>
 
-<div class="decision-container">
-    <h1>Decision Journal</h1>
-    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Soluta acc</p>
+    <p class="content-intro">Record the choice, your reasoning, and what you learn from the outcome.</p>
 
-    <form method="POST", action="{{ url_for('decision_journal')}}">
-         <label for="title">What's your title?</label>
-         <input type="text" name="title" id="title" placeholder="What is this decision?" required></textarea>
+    <form method="POST" action="{{ url_for('decision_journal') }}" class="content-form">
 
-         <label for="decision">What's your decisoin?</label>
-         <textarea type="text" name="decision" id="decision" placeholder="Describe your decision.." required></textarea>
+        <div class="field-group">
+            <label for="title">Decision title</label>
+            <input type="text" name="title" id="title" placeholder="What is this decision?" required>
+        </div>
 
-         <label for="reason">What's your reason?</label>
-         <textarea type="text" name="reason" id="reason" placeholder="Describe your reasons...?" required></textarea>
+        <div class="field-group">
+            <label for="decision">Decision</label>
+            <textarea name="decision" id="decision" placeholder="What did you decide?" required></textarea>
+        </div>
 
-         <label for="outcome">What's the outcome?</label>
-         <textarea type="text" name="outcome" id="outcome" placeholder="What's the outcome of your decision" required></textarea>
+        <div class="field-group">
+            <label for="reason">Reason</label>
+            <textarea name="reason" id="reason" placeholder="What led you to this decision?" required></textarea>
+        </div>
 
-         <label for="solution">What's your possible solutions?</label>
-         <textarea name="solution" id="solution" placeholder="What is your possible solution" required></textarea>
+        <div class="field-group">
+            <label for="outcome">Outcome</label>
+            <textarea name="outcome" id="outcome" placeholder="What happened?" required></textarea>
+        </div>
 
-        <button type="submit">Save Decision</button>
+        <div class="field-group">
+            <label for="solution">Possible solutions</label>
+            <textarea name="solution" id="solution" placeholder="What alternatives did you consider?" required></textarea>
+        </div>
+
+        <button type="submit">Save decision</button>
+
     </form>
 
-    <hr>
+    <hr class="section-divider">
 
-    <h2>Previous Decision</h2>
+    <h2 class="entry-heading">Previous decisions</h2>
+
+    <div class="entry-list">
 
         {% for journal in journals %}
-            <div class="journal-card">
-                
-                <h3>{{ journal.title }}</h3>
 
-                <p><strong>Decision: </strong></p>
-                <p></p>{{ journal.decision }} 
+        <article class="entry">
+            <h3>{{ journal.title }}</h3>
+            <p>
+                <span class="entry-label">Decision</span><br>
+                {{ journal.decision }}
+            </p>
+            <p>
+                <span class="entry-label">Reason</span><br>
+                {{ journal.reason }}
+            </p>
 
-                <p><strong>Reason: </strong></p>
-                <p></p>{{ journal.reason }} 
+            <p>
+                <span class="entry-label">Outcome</span><br>
+                {{ journal.outcome }}
+            </p>
 
-                <p><strong>Outcome: </strong></p>
-                <p></p>{{ journal.outcome }} 
+            <p>
+                <span class="entry-label">Possible solutions</span><br>
+                {{ journal.solution }}
+            </p>
 
-                <p><strong>Solution: </strong></p>
-                <p></p>{{ journal.solution }} 
+
+
+            <div class="entry-actions">
+                <details>
+                    <summary>Edit</summary>
+
+                    <form method="POST"
+                          action="{{ url_for('update_decision', id=journal.id) }}"
+                          class="content-form">
+
+                        <div class="field-group">
+                            <label for="edit-title-{{ journal.id }}">Decision title</label>
+                            <input type="text"
+                                   name="title"
+                                   id="edit-title-{{ journal.id }}"
+                                   value="{{ journal.title }}"
+                                   required>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="edit-decision-{{ journal.id }}">Decision</label>
+                            <textarea name="decision"
+                                      id="edit-decision-{{ journal.id }}"
+                                      required>{{ journal.decision }}</textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="edit-reason-{{ journal.id }}">Reason</label>
+                            <textarea name="reason"
+                                      id="edit-reason-{{ journal.id }}"
+                                      required>{{ journal.reason }}</textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="edit-outcome-{{ journal.id }}">Outcome</label>
+                            <textarea name="outcome"
+                                      id="edit-outcome-{{ journal.id }}"
+                                      required>{{ journal.outcome }}</textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="edit-solution-{{ journal.id }}">Possible solutions</label>
+                            <textarea name="solution"
+                                      id="edit-solution-{{ journal.id }}"
+                                      required>{{ journal.solution }}</textarea>
+                        </div>
+
+                        <button type="submit">Save changes</button>
+
+                    </form>
+                </details>
+
+                <!-- DELETE -->
+
+                <form method="POST"
+                      action="{{ url_for('delete_decision', id=journal.id) }}">
+
+                    <button type="submit"
+                            onclick="return confirm('Are you sure you want to delete this decision?');">
+                        Delete
+                    </button>
+
+                </form>
 
             </div>
 
-            {% else %}
+        </article>
 
-            <p>No decisions recorded yet.</p>
+        {% else %}
 
-            {% endfor %}
+        <p class="empty-state">No decisions recorded yet.</p>
 
-</div>
+        {% endfor %}
 
+    </div>
 
+</section>
 {% endblock %}

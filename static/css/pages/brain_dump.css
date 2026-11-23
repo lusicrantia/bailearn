@@ -1,0 +1,6 @@
+.search-field {
+    display: grid;
+    width: min(100%, 360px);
+    gap: 6px;
+    margin: -4px 0 22px;
+}

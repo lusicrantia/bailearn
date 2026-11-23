@@ -1,0 +1,126 @@
+.button,
+button {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 15px;
+    border: 1px solid var(--black);
+    border-radius: 2px;
+    background: var(--black);
+    color: var(--white);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button:hover,
+button:hover {
+    border-color: var(--gray-dark);
+    background: var(--gray-dark);
+    color: var(--white);
+}
+
+.button.secondary,
+button.secondary {
+    border-color: var(--border);
+    background: var(--white);
+    color: var(--black);
+}
+
+.button.secondary:hover,
+button.secondary:hover {
+    border-color: var(--gray-light);
+    background: var(--off-white);
+    color: var(--black);
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+}
+
+.auth-title,
+.content-title,
+.dashboard h1 {
+    margin: 0 0 8px;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 1.15;
+}
+
+.auth-card > p,
+.content-intro,
+.dashboard > p {
+    margin: 0 0 28px;
+    color: var(--gray-mid);
+}
+
+.auth-card > p:last-child {
+    margin: 24px 0 0;
+    font-size: 0.92rem;
+}
+
+.auth-form,
+.auth {
+    display: grid;
+    gap: 18px;
+}
+
+.content-form {
+    display: grid;
+    gap: 16px;
+}
+
+.form-group,
+.field-group {
+    display: grid;
+    gap: 6px;
+}
+
+label {
+    color: var(--gray-dark);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    min-height: 44px;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--white);
+    color: var(--black);
+    font: inherit;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--gray-light);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--black);
+    outline: none;
+}
+
+.auth-form button,
+.auth button,
+.content-form button {
+    justify-self: start;
+    margin-top: 4px;
+}

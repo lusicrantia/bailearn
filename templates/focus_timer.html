@@ -2,23 +2,44 @@
 
  {% block title %} Focus Timer {% endblock %}
 
+ {% block page_styles %}
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/focus_timer.css') }}">
+ {% endblock %}
+
  {% block content %}
- 
- <div class="container">
-    <h1 class="title">Focus Timer</h1>
-    <p>Lorem ipsum dolor sit a</p>
-
-    <hr>
-
-    <div class="timer-card">
-    <h2 id="timer">25:00</h2>
-
-    <button id="start">Start</button>
-    <button id="stop">Stop</button>
-    <button id="reset">Reset</button>
+ <section class="content-section" aria-labelledby="timer-title">
+     <h1 id="timer-title" class="content-title">Focus Timer</h1>
+     <p class="content-intro">Set aside a little time for one task at a time.</p>
+     <div class="timer" aria-label="Focus timer">
+        <p id="timer" class="timer-display" role="timer" aria-live="off">25:00</p>
+        <p id="timer-status" class="timer-status" aria-live="polite">Focus session</p>
+        <p id="session-count" class="session-count">Focus sessions completed: 0</p>
+        <progress id="timer-progress" class="timer-progress" value="0" max="1500" aria-label="Session progress"></progress>
+        <div class="timer-settings">
+            <div class="field-group">
+                <label for="focus-duration">Focus length</label>
+                <select id="focus-duration">
+                    <option value="1500">25 minutes</option>
+                    <option value="1800">30 minutes</option>
+                    <option value="2700">45 minutes</option>
+                    <option value="3600">60 minutes</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label for="break-duration">Break length</label>
+                <select id="break-duration">
+                    <option value="300">5 minutes</option>
+                    <option value="600">10 minutes</option>
+                    <option value="900">15 minutes</option>
+                </select>
+            </div>
+        </div>
+         <div class="timer-controls">
+            <button type="button" id="start">Start focus</button>
+            <button type="button" class="button secondary" id="start-break">Start break</button>
+            <button type="button" class="button secondary" id="stop">Pause</button>
+             <button type="button" class="button secondary" id="reset">Reset</button>
+         </div>
     </div>
- </div>
- 
- <script src="{{ url_for('static', filename='css/script.js') }}"></script>
- 
+ </section>
  {% endblock %}

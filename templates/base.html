@@ -4,45 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>{% block title %}BaiLearn{% endblock %} </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    {% block page_styles %}{% endblock %}
+    <title>{% block title %}BaiLearn{% endblock %}</title>
 </head>
 <body>
-     <div class="site-shell">
-        <nav class="nav-bar">
-            <div class="container-nav">
-                <div class="site-name">
-                    <span class="brand-mark" aria-hidden="true"></span>
-                    <span>BaiLearn</span>
-                </div>
-
-                <button class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-
-                <div class="nav-links">
-                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-                    <a href="{{ url_for('brain_dump')}}">Brain Dump Box </a>
-                    <a href="{{ url_for('focus_timer')}}">Focus Timer </a>
-                    <a href="{{ url_for('decision_journal')}}">Decision Journal </a>
-                    <a href="{{ url_for('flashcard') }}">Flashcards</a>
-
-                    <a href="{{ url_for('logout') }}">Logout</a>
-                {% else %}
-                    <a href="{{ url_for('login') }}">Login</a>
-                    <a href="{{ url_for('register') }}">Register</a>
-                {% endif %}
-                </div>
+    {% if current_user.is_authenticated %}
+    <div class="app-layout">
+        <aside class="sidebar" aria-label="Workspace navigation">
+            <a class="site-name" href="{{ url_for('dashboard') }}">BaiLearn</a>
+            <nav class="sidebar-nav" aria-label="Main navigation">
+                <a href="{{ url_for('dashboard') }}"
+                   {% if request.endpoint == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+                <a href="{{ url_for('brain_dump') }}"
+                   {% if request.endpoint in ['brain_dump', 'update_brain_dump', 'delete_brain_dump'] %}aria-current="page"{% endif %}>Brain Dump</a>
+                <a href="{{ url_for('decision_journal') }}"
+                   {% if request.endpoint in ['decision_journal', 'update_decision', 'delete_decision'] %}aria-current="page"{% endif %}>Decision Journal</a>
+                <a href="{{ url_for('focus_timer') }}"
+                   {% if request.endpoint == 'focus_timer' %}aria-current="page"{% endif %}>Focus Timer</a>
+                <a href="{{ url_for('flashcard') }}"
+                   {% if request.endpoint in ['flashcard', 'update_flashcard', 'delete_flashcard'] %}aria-current="page"{% endif %}>Flashcards</a>
+            </nav>
+            <div class="sidebar-account">
+                <span class="account-name">{{ current_user.username }}</span>
+                <a href="{{ url_for('logout') }}">Log out</a>
+            </div>
+        </aside>
+        <div class="workspace">
+            <header class="mobile-header">
+                <a class="site-name" href="{{ url_for('dashboard') }}">BaiLearn</a>
+                <details class="mobile-navigation">
+                    <summary>Menu</summary>
+                    <nav class="mobile-nav-links" aria-label="Main navigation">
+                        <a href="{{ url_for('dashboard') }}"
+                           {% if request.endpoint == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+                        <a href="{{ url_for('brain_dump') }}"
+                           {% if request.endpoint in ['brain_dump', 'update_brain_dump', 'delete_brain_dump'] %}aria-current="page"{% endif %}>Brain Dump</a>
+                        <a href="{{ url_for('decision_journal') }}"
+                           {% if request.endpoint in ['decision_journal', 'update_decision', 'delete_decision'] %}aria-current="page"{% endif %}>Decision Journal</a>
+                        <a href="{{ url_for('focus_timer') }}"
+                           {% if request.endpoint == 'focus_timer' %}aria-current="page"{% endif %}>Focus Timer</a>
+                        <a href="{{ url_for('flashcard') }}"
+                           {% if request.endpoint in ['flashcard', 'update_flashcard', 'delete_flashcard'] %}aria-current="page"{% endif %}>Flashcards</a>
+                        <a href="{{ url_for('logout') }}">Log out</a>
+                    </nav>
+                </details>
+            </header>
+    {% else %}
+    <header class="public-header">
+        <nav class="public-nav" aria-label="Main navigation">
+            <a class="site-name" href="{{ url_for('homepage') }}">BaiLearn</a>
+            <div class="public-nav-links">
+                <a href="{{ url_for('login') }}">Log in</a>
+                <a href="{{ url_for('register') }}">Create account</a>
             </div>
         </nav>
-     </div>
-
-     <main>
-        {% block content %}
-
-        {% endblock %}
-     </main>
+    </header>
+    {% endif %}
+    <main id="main-content" class="{% if current_user.is_authenticated %}workspace-main{% else %}public-main{% if request.endpoint == 'homepage' %} homepage-main{% endif %}{% endif %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages" role="status" aria-live="polite">
+                {% for category, message in messages %}
+                <p class="flash-message">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+    {% if current_user.is_authenticated %}
+    </div>
+    </div>
+    {% endif %}
+    {% block scripts %}{% endblock %}
+    <script src="{{ url_for('static', filename='css/script.js') }}" defer></script>
 </body>
 </html>

@@ -3,15 +3,22 @@
 
 {% block title %}Dashboard{% endblock %}
 
-{% block content %}
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+{% endblock %}
 
-<section class="dashboard-card">
-    <h2>Welcome, {{ current_user.username }}!</h2>
-    <p>You are successfully logged in.</p>
-    <div class="button-row">
-        <a class="button primary" href="{{ url_for('brain_dump') }}">Open your Brain Dump Box</a>
-        <a class="button" href="{{ url_for('logout') }}">Logout</a>
-    </div>
+{% block content %}
+<section class="dashboard" aria-labelledby="dashboard-title">
+    <p class="eyebrow"><time id="today-date"></time></p>
+    <h1 id="dashboard-title">Good to see you, {{ current_user.username }}.</h1>
+    <p>Make a little progress on what matters today.</p>
+    <h2 class="entry-heading dashboard-section-title">Your workspace</h2>
+    <ul class="dashboard-links">
+        <li><a href="{{ url_for('brain_dump') }}"><span>Brain Dump</span><span>Capture your thoughts</span></a></li>
+        <li><a href="{{ url_for('decision_journal') }}"><span>Decision Journal</span><span>Reflect on a choice</span></a></li>
+        <li><a href="{{ url_for('focus_timer') }}"><span>Focus Timer</span><span>Make time for one task</span></a></li>
+        <li><a href="{{ url_for('flashcard') }}"><span>Flashcards</span><span>Review what you are learning</span></a></li>
+    </ul>
 </section>
 
 {% endblock %}

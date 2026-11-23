@@ -2,52 +2,74 @@
 
 {% block title %} Flashcard {% endblock %}
 
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/flashcard.css') }}">
+{% endblock %}
+
 {% block content %}
+<section class="content-section" aria-labelledby="flashcards-title">
+    <h1 id="flashcards-title" class="content-title">Flashcards</h1>
+    <p class="content-intro">Create study cards to help you remember what matters.</p>
 
-<div class="flashcard-container">
-
-    <h1>Flashcard Generator</h1>
-    <p>Create your own study cards to help you learn.</p>
-
-    <form method="POST" action="{{ url_for('flashcard') }}">
-
-        <label for="question">Question</label>
-        <textarea
-            name="question"
-            id="question"
-            placeholder="Enter your question..."
-            required></textarea>
-
-        <label for="answer">Answer</label>
-        <textarea
-            name="answer"
-            id="answer"
-            placeholder="Enter your answer..."
-            required></textarea>
-
-        <button type="submit">Create Flashcard</button>
-
+    <form method="POST" action="{{ url_for('flashcard') }}" class="content-form">
+        <div class="field-group">
+            <label for="question">Question</label>
+            <textarea name="question" id="question" placeholder="Enter a question..." required></textarea>
+        </div>
+        <div class="field-group">
+            <label for="answer">Answer</label>
+            <textarea name="answer" id="answer" placeholder="Enter the answer..." required></textarea>
+        </div>
+        <button type="submit">Create flashcard</button>
     </form>
 
-    <hr>
-
-    <h2>Your Flashcards</h2>
-
-    {% for card in cards %}
-
-        <div class="flashcard">
-
+    <hr class="section-divider">
+    <h2 class="entry-heading">Your flashcards</h2>
+    <div class="flashcard-review" data-flashcard-review>
+        {% for card in cards %}
+        <article class="flashcard" data-flashcard>
+            <p class="flashcard-side-label">Question</p>
             <h3>{{ card.question }}</h3>
-            <p>{{ card.answer }}</p>
+            <div class="flashcard-answer" hidden>
+                <p class="flashcard-side-label">Answer</p>
+                <p>{{ card.answer }}</p>
+            </div>
+            <button type="button" class="button secondary reveal-answer">Reveal answer</button>
+            <div class="entry-actions">
+                <details class="edit-details">
+                    <summary>Edit</summary>
+                    <form method="POST"
+                          action="{{ url_for('update_flashcard', id=card.id) }}"
+                          class="content-form">
+                        <div class="field-group">
+                            <label for="question-{{ card.id }}">Question</label>
+                            <textarea name="question" id="question-{{ card.id }}" required>{{ card.question }}</textarea>
+                        </div>
+                        <div class="field-group">
+                            <label for="answer-{{ card.id }}">Answer</label>
+                            <textarea name="answer" id="answer-{{ card.id }}" required>{{ card.answer }}</textarea>
+                        </div>
+                        <button type="submit">Save changes</button>
+                    </form>
+                </details>
 
+                <form method="POST"
+                      action="{{ url_for('delete_flashcard', id=card.id) }}"
+                      onsubmit="return confirm('Delete this flashcard?');">
+                    <button type="submit" class="danger">Delete</button>
+                </form>
+            </div>
+        </article>
+        {% else %}
+        <p class="empty-state">No flashcards yet.</p>
+        {% endfor %}
+        <p class="empty-state review-empty" hidden>No flashcards to review.</p>
+        <div class="flashcard-controls" hidden>
+            <button type="button" class="button secondary" data-previous-card>Previous</button>
+            <p class="flashcard-progress" aria-live="polite"></p>
+            <button type="button" class="button secondary" data-shuffle-cards>Shuffle</button>
+            <button type="button" data-next-card>Next</button>
         </div>
-
-    {% else %}
-
-        <p>No flashcards yet. Create your first one!</p>
-
-    {% endfor %}
-
-</div>
-
+    </div>
+</section>
 {% endblock %}

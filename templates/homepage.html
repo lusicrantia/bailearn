@@ -2,17 +2,17 @@
 
 {% block title %} Home  {% endblock %}
 
-{% block content %} 
-<div class="hero">
-    <div>
-        <h1>A calmer way to learn.</h1>
-        <p class="muted">Keep your study notes and focus tools in one place. Clear your mind, find your next step, and make space for better learning.</p>
-    </div>
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/homepage.css') }}">
+{% endblock %}
 
+{% block content %}
+<section class="hero" aria-labelledby="home-title">
+    <h1 id="home-title">Make room to think.</h1>
+    <p class="muted">A quiet place for your notes, decisions, flashcards, and focused work.</p>
     <div class="button-row">
-        <a class="button primary" href="{{ url_for('register') }}">Get Started</a>
-        <a class="button" href="{{ url_for('login') }}">Login</a>
+        <a class="button" href="{{ url_for('register') }}">Create an account</a>
+        <a class="button secondary" href="{{ url_for('login') }}">Log in</a>
     </div>
-</div>
-
+ </section>
 {% endblock %}

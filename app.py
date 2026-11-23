@@ -160,6 +160,32 @@ def brain_dump():
 
     return render_template('brain_dump.html', dumps=dumps)
 
+@app.route('/brain_dump/update/<int:id>', methods=['POST'])
+@login_required
+def update_brain_dump(id):
+    dump = db.get_or_404(Brain_dump, id)  
+    content = request.form.get('content', '').strip()
+
+    if content:
+        dump.content = content
+        db.session.commit()
+        flash("Brain dump updated!", "success")
+    else:
+        flash("Content cannot be empty.", "warning")
+
+    return redirect(url_for('brain_dump'))
+
+
+@app.route('/brain_dump/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_brain_dump(id):
+    dump = db.get_or_404(Brain_dump, id) 
+    db.session.delete(dump)
+    db.session.commit()
+    
+    flash("Brain dump deleted.", "info")
+    return redirect(url_for('brain_dump'))
+
 
 @app.route('/focus-timer')
 @login_required
@@ -196,6 +222,52 @@ def decision_journal():
     return render_template('decision_journal.html', journals=journals)
 
 
+@app.route('/decision_journal/update/<int:id>', methods=['POST'])
+@login_required
+def update_decision(id):
+
+    journal = Decision_journal.query.get_or_404(id)
+   
+    if request.method == 'POST':
+
+        title = request.form.get('title', '').strip()
+        decision = request.form.get('decision', '').strip()
+        reason = request.form.get('reason', '').strip()
+        outcome = request.form.get('outcome', '').strip()
+        solution = request.form.get('solution', '').strip()
+
+        if not title or not decision or not  reason or not outcome or not solution:
+            flash('All fields are required to fill in')
+            return redirect(url_for('decision_journal', id=id))
+
+        journal.title = title
+        journal.decision = decision
+        journal.reason = reason
+        journal.outcome = outcome
+        journal.solution = solution
+
+        db.session.commit()
+
+        flash('Decision has been updated', 'success')
+        return redirect(url_for('decision_journal'))
+
+    return render_template('update_decision.html', journal=journal)
+
+
+@app.route('/decision_journal/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_decision(id):
+
+    journal = Decision_journal.query.get_or_404(id)
+
+    db.session.delete(journal)
+    db.session.commit()
+
+    flash('Decision has been deleted!', 'success')
+
+    return redirect(url_for('decision_journal'))
+
+
 @app.route('/flashcard', methods=['GET', 'POST'])
 @login_required
 def flashcard():
@@ -226,6 +298,44 @@ def flashcard():
     ).order_by(Flashcard.created_at.desc()).all()
 
     return render_template('flashcard.html', cards=cards)
+
+from flask import abort
+
+@app.route('/flashcard/update/<int:id>', methods=['POST'])
+@login_required
+def update_flashcard(id):
+    card = db.get_or_404(Flashcard, id)
+
+    if card.user_id != current_user.id:
+        abort(403)
+
+    question = request.form.get('question', '').strip()
+    answer = request.form.get('answer', '').strip()
+
+    if question and answer:
+        card.question = question
+        card.answer = answer
+        db.session.commit()
+        flash("Flashcard updated!", "success")
+    else:
+        flash("Both question and answer are required.", "warning")
+
+    return redirect(url_for('flashcard'))
+
+
+@app.route('/flashcard/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_flashcard(id):
+    card = db.get_or_404(Flashcard, id)
+
+    if card.user_id != current_user.id:
+        abort(403)
+
+    db.session.delete(card)
+    db.session.commit()
+    flash("Flashcard deleted.", "success")
+
+    return redirect(url_for('flashcard'))
 
 
 with app.app_context():
