@@ -15,7 +15,7 @@
     {% if current_user.is_authenticated %}
     <div class="app-layout">
         <aside class="sidebar" aria-label="Workspace navigation">
-            <a class="site-name" href="{{ url_for('dashboard') }}">BaiLearn</a>
+            <a class="site-name" href="{{ url_for('dashboard') }}">Glory</a>
             <nav class="sidebar-nav" aria-label="Main navigation">
                 <a href="{{ url_for('dashboard') }}"
                    {% if request.endpoint == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
@@ -35,7 +35,7 @@
         </aside>
         <div class="workspace">
             <header class="mobile-header">
-                <a class="site-name" href="{{ url_for('dashboard') }}">BaiLearn</a>
+                <a class="site-name" href="{{ url_for('dashboard') }}">Glory</a>
                 <details class="mobile-navigation">
                     <summary>Menu</summary>
                     <nav class="mobile-nav-links" aria-label="Main navigation">

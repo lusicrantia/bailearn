@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user  
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from flask import abort
 
 
 # Run the application
@@ -50,6 +51,27 @@ class Flashcard(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),  nullable=False)
     created_at = db.Column(db.DateTime,default=datetime.utcnow)
 
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    subject = db.Column(db.String(100), nullable=False)
+    priority = db.Column(db.String(20))
+    due_date = db.Column(db.Date)
+    is_completed = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime,default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)
+
+class Notes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150), nullable=False)
+    content = db.Colum(db.Text, nullable= False)
+    category = db.Column(db.String(150), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default= datetime.utcnow, onupdate=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -134,7 +156,6 @@ def logout():
 @login_required
 def dashboard():
     return render_template('dashboard.html')
-
 
 @app.route('/brain_dump', methods=['GET', 'POST'])
 @login_required
@@ -299,7 +320,6 @@ def flashcard():
 
     return render_template('flashcard.html', cards=cards)
 
-from flask import abort
 
 @app.route('/flashcard/update/<int:id>', methods=['POST'])
 @login_required
@@ -336,6 +356,94 @@ def delete_flashcard(id):
     flash("Flashcard deleted.", "success")
 
     return redirect(url_for('flashcard'))
+
+@app.route('/task_manager', methods=['GET', 'POST'])
+@login_required
+def task_manager():
+
+    if request.method == 'POST':
+
+        title = request.form.get('title', ' ').strip()
+        description = request.form.get('description', ' ').strip()
+        subject = request.form.get('subject', ' ').strip()
+        priority = request.form.get('priority', ' ').strip()
+        due_date = request.form.get('due_date')
+
+        if not title or not description or not subject or not priority or not due_date:
+            flash('All fields are required to fill in')
+            return redirect(url_for('task_manager'))
+
+        task = Task(title=title, description=description, subject=subject, priority=priority, due_date=datetime.strptime(due_date, '%Y-%m-%d').date() if due_date else None, user_id=current_user.id)
+
+        db.session.add(task)
+        db.session.commit()
+
+        flash('Task successfully added!', 'success')
+
+        return redirect(url_for('task_manager'))
+
+    tasks = Task.query.filter_by(
+        user_id=current_user.id
+    ).order_by(Task.created_at.desc()).all()
+
+    return render_template('task_manager.html', tasks=tasks)
+    
+
+@app.route('/task_manager/update/<int:id>', methods=['POST'])
+@login_required
+def update_task(id):
+
+    task = db.get_or_404(Task, id)
+
+    title = request.form.get('title', ' ').strip()
+    description = request.form.get('description', ' ').strip()
+    subject = request.form.get('subject', ' ').strip()
+    priority = request.form.get('priority', ' ').strip()
+    due_date = request.form.get('due_date')
+
+    if title or not description or not subject or not priority or not due_date:
+        flash('All fields are required to fill in', 'success')
+        return redirect(url_for('task_manager'))
+
+
+    if title and description and subject and priority and due_date:
+        task.title = title
+        task.description = description
+        task.subject = subject
+        task.priority = priority
+        task.due_date = due_date
+        db.session.commit()
+
+    return redirect(url_for('task_manager'))
+
+@app.route('/task_manager/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_task(id):
+
+    task = db.get_or_404(Task, id)
+
+    db.session.delete(task)
+    db.session.commit()
+
+    return redirect(url_for('task_manager'))
+
+@app.route('/note', methods=['GET', 'POST'])
+@login_required
+def note():
+
+    if request.form.get == 'POST':
+
+        title = request.form.get('title', ' ').strip()
+        content = request.form.get('content', ' ').strip()
+        category = request.form.get('category', ' ').strip()
+
+        if title and content and category:
+            note = Notes(title=title, content=content, category=category, user_id=current_user.id)
+            
+
+
+
+
 
 
 with app.app_context():
